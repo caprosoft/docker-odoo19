@@ -1,4 +1,4 @@
-# Odoo 19 Docker images installation script
+# Odoo 19 (Docker) installation script
 
 ## 🧩 Prerequisites
 
@@ -74,5 +74,29 @@ sudo docker run -d -v odoo-data:/var/lib/odoo \
 * `odoo-db` stores the **PostgreSQL data**, keeping it persistent even if the container is removed.
 * `odoo-data` stores the **Odoo application data**, ensuring that your configurations and files are preserved.
 
+---
+
+### 🧹 Stop, Remove, and Re-run Containers
+
+If you need to stop or remove the containers and volumes, use:
+
+```bash
+# Stop containers
+sudo docker stop odoo db
+
+# Remove containers
+sudo docker rm odoo db
+
+# (Optional) Remove volumes
+sudo docker volume rm odoo-data odoo-db
+```
+
+To **recreate and re-run** everything after cleanup, simply execute again:
+
+```bash
+sudo ./odoo19.sh
+```
+
+This will rebuild the containers and restart your Odoo environment from scratch.
 
 
