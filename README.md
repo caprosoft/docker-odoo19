@@ -76,6 +76,24 @@ sudo docker run -d -v odoo-data:/var/lib/odoo \
 
 ---
 
+### ♻️ Restart Containers
+
+If the containers already exist (e.g. after a system reboot or a manual stop), **do not run the script again** — just restart them.
+
+> ⚠️ **Important:** Always start `db` first, before `odoo`. If Odoo starts before the database is ready, it will fail to connect and throw an error.
+
+```bash
+# Restart containers (always db first!)
+sudo docker start db odoo
+```
+To stop them again:
+
+```bash
+sudo docker stop odoo db
+```
+
+---
+
 ### 🧹 Stop, Remove, and Re-run Containers
 
 If you need to stop or remove the containers and volumes, use:
