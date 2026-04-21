@@ -117,4 +117,69 @@ sudo ./odoo19.sh
 
 This will rebuild the containers and restart your Odoo environment from scratch.
 
+---
+ 
+### 🔧 Auto-start with systemd
+ 
+To have the containers **start automatically at boot**, you can create a systemd service.
+ 
+> ✅ **Requirement:** The containers must already exist (i.e. the script `odoo19.sh` must have been run at least once).
+ 
+**1. Create the service file**
+ 
+```bash
+sudo nano /etc/systemd/system/odoo19.service
+```
+ 
+**2. Paste the following content**
+ 
+```ini
+[Unit]
+Description=Odoo 19 Docker Containers
+Requires=docker.service
+After=docker.service
+ 
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ 
+ExecStart=/bin/sh -c 'docker start db && sleep 5 && docker start odoo'
+ExecStop=/bin/sh -c 'docker stop odoo && docker stop db'
+ 
+[Install]
+WantedBy=multi-user.target
+```
+ 
+> 💡 The `sleep 5` gives PostgreSQL a few seconds to initialize before Odoo tries to connect.
+ 
+**3. Reload systemd and enable the service**
+ 
+```bash
+# Reload systemd to pick up the new unit file
+sudo systemctl daemon-reload
+ 
+# Enable the service to start at boot
+sudo systemctl enable odoo19.service
+```
+ 
+**4. Start / Stop / Check the service manually**
+ 
+```bash
+# Start
+sudo systemctl start odoo19.service
+ 
+# Stop
+sudo systemctl stop odoo19.service
+ 
+# Check status
+sudo systemctl status odoo19.service
+```
+ 
+**5. View logs**
+ 
+```bash
+sudo journalctl -u odoo19.service
+```
+ 
+---
 
